@@ -1,0 +1,22 @@
+{
+    "env": "dev",
+    "buildType": "debug",
+    "clientType": "android",
+    "clientApp": "NOSTRA_APP",
+    "appInfo": {
+        "version_name": "v0.1.5-devDebug",
+        "version_code": 15
+    },
+    "userInfo": {
+        "user_id": "39f65c57-bc3d-41cf-b88e-c74e4dbcd92a",
+        "user_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VySW5mbyIsInVzZXJJZCI6ImEwZmRmODRlLTg1MDYtNDMxMi04YjY0LTM5MWQ5OGMwY2M3NCIsImNvbW11bml0eVVzZXJJZCI6IjY3YTA2NjQxZTAwOGY2YjE2MTQxNTVmZCIsImlhdCI6MTc0Mzg0NTI4MCwiZXhwIjoxNzUxNjIxMjgwfQ.aa8lANpYYTdceI9N3EwaS9jFHIOX_1rdcE20ifLkiWQ"
+    },
+    "unityData": {}
+    // "unityData": {
+    //     "post_type": "QUICK_PLAY_CHARACTER_POST",
+    //     "character": {
+    //         "char_id": "67ebea2b4801ca8afa9deca1"
+    //     },
+    //     "shareStatus": "DRAFT"
+    // }
+}

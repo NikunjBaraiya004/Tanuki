@@ -1,0 +1,101 @@
+using DG.Tweening;
+using EasyButtons;
+using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+namespace nostra.booboogames.Tanuki
+{
+    
+    public class GameManager : MonoBehaviour
+    {
+        [SerializeField] Button RestartBtn;
+
+
+
+        private void Start()
+        {
+            RestartBtn.onClick.AddListener(() => 
+            {
+                SceneManager.LoadScene(0);
+            });
+        }
+
+
+        #region Coins Manager
+
+        [Header("CoinsManager")]
+        [SerializeField] TextMeshProUGUI CoinsText;
+        [SerializeField] int currentCoinCount;
+        [SerializeField] Transform TargetTempscore;
+        [SerializeField] TextMeshProUGUI TempScoreText;
+
+        [SerializeField] GearBox gearBox;
+
+        public void IncreaseCoins(int coinsAdd = 1)
+        {
+            int oldValue = currentCoinCount;
+            int newValue = currentCoinCount + coinsAdd;
+            currentCoinCount = newValue;
+
+            // Save original position and color
+            Vector3 originalPos = TempScoreText.transform.position;
+            Color originalColor = TempScoreText.color;
+
+            // Set initial text and fully transparent
+            TempScoreText.text = "+" + coinsAdd;
+            TempScoreText.transform.position = originalPos;
+            TempScoreText.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0f);
+
+            // Create a sequence
+            Sequence seq = DOTween.Sequence();
+
+            seq.Append(TempScoreText.DOFade(1, 0.2f)) // Fade in
+               .Append(TempScoreText.transform.DOMove(TargetTempscore.position, 0.5f).SetEase(Ease.InQuad)) // Move
+               .Join(TempScoreText.DOFade(0, 0.5f)) // Fade out during move
+               .AppendCallback(() =>
+               {
+                   // Coin value increment
+                   CoinsText.transform.DOKill();
+                   CoinsText.transform.localScale = Vector3.one;
+
+                   float baseSpeed = 0.05f;
+                   float duration = Mathf.Clamp(coinsAdd * baseSpeed, 0.2f, 1.2f);
+
+                   DOTween.To(() => oldValue, x =>
+                   {
+                       oldValue = x;
+                       CoinsText.text = x.ToString();
+                   }, newValue, duration).SetEase(Ease.OutQuad);
+
+                   CoinsText.transform.DOScale(Vector3.one * 1.3f, 0.1f).OnComplete(() =>
+                   {
+                       CoinsText.transform.DOScale(Vector3.one, 0.2f);
+                       gearBox.SpinWheelOn = false;
+                       gearBox.Resetpos();
+                   });
+               })
+               .AppendInterval(0.1f)
+               .AppendCallback(() =>
+               {
+                   // Reset position and alpha
+                   TempScoreText.transform.position = originalPos;
+                   TempScoreText.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0f);
+               });
+        }
+
+
+
+        [Button]
+        public void IncreaseCount()
+        { 
+            IncreaseCoins(1000);
+        }
+
+        #endregion
+
+
+    }
+
+}
