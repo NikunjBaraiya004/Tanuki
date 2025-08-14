@@ -126,8 +126,7 @@ namespace nostra.booboogames.Tanuki
 
         private void FixedUpdate()
         {
-            if (playerState == PlayerState.IsDeath)
-                return;
+           
 
             float hInput, vInput;
 
@@ -140,6 +139,9 @@ namespace nostra.booboogames.Tanuki
             if (onSurface)
             {
                 HandlePivotAndSpark(vInput, hInput, inputMagnitude);
+
+                if (playerState == PlayerState.IsDeath)
+                    return;
 
                 if (!IsJumper)
                 {
@@ -188,7 +190,7 @@ namespace nostra.booboogames.Tanuki
                     DriftText.DOFade(1, 0.2f);
                     driftScore += 1;
                     driftTimer = 0f;
-                    DriftText.text = "Drift :- " + driftScore.ToString();
+                    DriftText.text = "Drift   + " + driftScore.ToString();
                     //   Debug.Log($"Drift Score: {driftScore}");
                 }
                 wasDrifting = true;
@@ -421,7 +423,7 @@ namespace nostra.booboogames.Tanuki
                     JumpText.DOFade(1, 0.2f);
                     jumpScore += 1;
                     jumpTimer = 0f;
-                    JumpText.text = "Jump :- " + jumpScore.ToString();
+                    JumpText.text = "Jump    + " + jumpScore.ToString();
                 }
                 wasJumping = true;
             }
