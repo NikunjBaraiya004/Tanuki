@@ -37,11 +37,27 @@ namespace nostra.booboogames.Tanuki
         }
 
         float tempvalue = 0;
-
+/*
         private void Update()
         {
             tempvalue = Mathf.Lerp(tempvalue, animationValue, Speed * Time.deltaTime);
             animator.SetFloat("Horizontal", tempvalue);
+        }*/
+
+        public void SetFloat(float H_value, float V_value)
+        {
+            //if (value > 0.9)
+            //    value = 1;
+            //else if (value < -0.9)
+            //    value = -1;
+
+                animator.SetFloat("Horizontal", H_value);
+                animator.SetFloat("Vertical", V_value);
+        }
+
+        public void OnLanding()
+        {
+            animator.Play("Landing");
         }
 
     }

@@ -13,7 +13,7 @@ namespace nostra.booboogames.Tanuki
         public PathManager pathManager;
         public GameObject Previouspath;
         public PathManager.PathType RoadType;
-
+     
         public Transform GetEndPoint() => endPoint;
         
         public bool IsHalfCurve() => isHalfCurve;

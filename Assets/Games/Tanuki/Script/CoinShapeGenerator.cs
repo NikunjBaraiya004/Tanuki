@@ -9,8 +9,6 @@ namespace nostra.booboogames.Tanuki
         {
             S,
             HalfCircle,
-            QuarterCircle,
-            Spiral,
             SineWave,
             Zigzag
         }
@@ -36,6 +34,7 @@ namespace nostra.booboogames.Tanuki
 
         private void Start()
         {
+            coinCount = Random.Range(4, 10);
             GenerateRandomShape();
         }
 
@@ -67,12 +66,6 @@ namespace nostra.booboogames.Tanuki
                     break;
                 case ShapeType.HalfCircle:
                     GenerateArc(180f);
-                    break;
-                case ShapeType.QuarterCircle:
-                    GenerateArc(90f);
-                    break;
-                case ShapeType.Spiral:
-                    GenerateSpiral(spiralTurns);
                     break;
                 case ShapeType.SineWave:
                     GenerateSineWave(sineWaveWidth, sineWaveHeight);

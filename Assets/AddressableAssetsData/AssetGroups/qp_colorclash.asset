@@ -14,12 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: qp_colorclash
   m_GUID: 44f2bb828bfb84b60a27c112b7e0f0eb
-  m_SerializeEntries:
-  - m_GUID: 9c508bb8998cd409aaafdb0bc8910f24
-    m_Address: game_colorclash
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 56998aaa0b3e346cf8cd1972c2b6976c, type: 2}
   m_SchemaSet:

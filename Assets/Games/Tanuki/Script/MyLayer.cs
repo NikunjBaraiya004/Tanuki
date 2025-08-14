@@ -7,7 +7,7 @@ namespace nostra.booboogames.Tanuki
         public static string PLAYER = "QP_Layer_03";
         public static string COINS = "QP_Layer_04";
         public static string DEAD = "QP_Layer_05";
-        public static string PARTICLE = "QP_Layer_06";
+        public static string JUMP = "QP_Layer_06";
         public static string ENEMY_PROJECTILE = "QP_Layer_07";
         public static string PLAYER_PROJECTILE = "QP_Layer_08";
         public static string ENEMY_DETECTION = "QP_Layer_09";

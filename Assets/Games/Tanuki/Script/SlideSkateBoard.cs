@@ -1,5 +1,4 @@
 using DG.Tweening;
-using nostra.booboogames.slapcastle;
 using UnityEngine;
 
 namespace nostra.booboogames.Tanuki

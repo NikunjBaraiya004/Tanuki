@@ -1,6 +1,7 @@
 using UnityEngine;
 using DG.Tweening;
 using EasyButtons;
+using UnityEngine.UI;
 
 namespace nostra.booboogames.Tanuki
 {
@@ -13,7 +14,8 @@ namespace nostra.booboogames.Tanuki
         private int numberOfSegments = 6;
 
         [SerializeField] GameManager gameManager;
-     
+        [SerializeField] GameObject SpinParent;
+        [SerializeField] GearBox gearbox;
 
         [Header("Rewards for Segments")]
         public int[] segmentRewards = new int[6]
@@ -43,13 +45,14 @@ namespace nostra.booboogames.Tanuki
                     float finalZ = transform.eulerAngles.z;
                     int segment = GetSegmentFromAngleCustom(finalZ);
 
-                    Debug.Log($"Final Z Angle: {finalZ} | Inverted: {360f - finalZ % 360f} | Won Segment: {segment}");
+                    // Debug.Log($"Final Z Angle: {finalZ} | Inverted: {360f - finalZ % 360f} | Won Segment: {segment}");
 
                     if (segmentRewards != null && segment < segmentRewards.Length)
-                        Debug.Log("Reward: " + segmentRewards[segment]);
+                        //Debug.Log("Reward: " + segmentRewards[segment]);
 
+                    gearbox.SetGearImgFillAMount();
                     transform.rotation = Quaternion.identity;
-                    transform.DOScale(Vector3.zero, 0.25f);
+                    SpinParent.transform.DOScale(Vector3.zero, 0.25f);
                     gameManager.IncreaseCoins(segmentRewards[segment]);
                 });
 

@@ -1,6 +1,7 @@
 using DG.Tweening;
 using EasyButtons;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 namespace nostra.booboogames.Tanuki
@@ -10,7 +11,7 @@ namespace nostra.booboogames.Tanuki
         [SerializeField] Image GearImg;
         float gearcount = 0;
 
-        [SerializeField] Transform GreenGear;
+        [SerializeField] Transform GreenGear,SpinParent;
         [SerializeField] SpinWheel SpinWheel;
         [SerializeField] float scalespin;
 
@@ -24,59 +25,112 @@ namespace nostra.booboogames.Tanuki
         [SerializeField] float moveDuration = 0.25f;
 
         public bool SpinWheelOn = false;
+        [SerializeField] float increasevalue;
 
         // For tracking last method call
         private float lastIncreaseTime = 0f;
-        private float resetDelay = 0.35f; // How long to wait before calling Resetpos
+        private float resetDelay = 1f; // How long to wait before calling Resetpos
+
+        /*  [Button]
+          public void IncreaseGear()
+          {
+              lastIncreaseTime = Time.time;
+
+              // Stop only movement tweens, not UI tweens
+              transform.DOKill();
+
+              // Increase first, so it’s never skipped
+              gearcount += increasevalue;
+              gearcount = Mathf.Clamp01(gearcount);
+
+              // Move UI
+              transform.DOLocalMoveX(punchInX, moveDuration).SetEase(Ease.InCubic).OnComplete(() =>
+              {
+                  GearImg.DOFillAmount(gearcount, 0.3f).SetEase(Ease.OutQuad).OnComplete(() =>
+                  {
+                      if (gearcount >= 1f)
+                      {
+                          CompleteGear();
+                          SpinWheelOn = true;
+                      }
+                      else
+                      {
+                          GreenGear.DOLocalRotate(
+                              GreenGear.localEulerAngles + new Vector3(0, 0, -rotateStep),
+                              rotateDuration,
+                              RotateMode.FastBeyond360
+                          ).SetEase(Ease.OutSine).OnComplete(() =>
+                          {
+                              DOVirtual.DelayedCall(resetDelay, () =>
+                              {
+                                  if (!SpinWheelOn && Time.time - lastIncreaseTime >= resetDelay)
+                                  {
+                                      Resetpos();
+                                  }
+                              });
+                          });
+                      }
+                  });
+              });
+          }*/
 
         [Button]
         public void IncreaseGear()
         {
-            // 1. Record the time of this call
             lastIncreaseTime = Time.time;
 
-            // 2. Stop any previous tweens
-            transform.DOKill();
+            gearcount = Mathf.Clamp01(gearcount + increasevalue);
+          
 
-            // 3. Move to punch-in position
-            transform.DOLocalMoveX(punchInX, moveDuration).SetEase(Ease.InCubic).OnComplete(() =>
-            {
-                // 4. Increase gear logic
-                gearcount += 0.1f;
-                gearcount = Mathf.Clamp01(gearcount);
+            PlayPunchEffect();
 
-                GearImg.DOFillAmount(gearcount, 0.3f).SetEase(Ease.OutQuad).OnComplete(() =>
+           
+        }
+
+        private void PlayPunchEffect()
+        {
+            // Kill only position tween
+            DOTween.Kill(transform, false);
+
+            // Smooth punch motion
+            transform.DOLocalMoveX(punchInX, moveDuration)
+                .SetEase(Ease.InCubic)
+                .OnComplete(() =>
                 {
-                    if (gearcount == 1)
+                    GearImg.DOFillAmount(gearcount, 0.15f).SetEase(Ease.OutQuad);
+
+                    if (gearcount >= 1f && !SpinWheelOn)
                     {
                         CompleteGear();
+                       
                         SpinWheelOn = true;
                     }
-                    else
+
+                    GreenGear.DOLocalRotate(
+                        GreenGear.localEulerAngles + new Vector3(0, 0, -rotateStep),
+                        rotateDuration,
+                        RotateMode.FastBeyond360
+                    ).SetEase(Ease.OutSine).OnComplete(() =>
                     {
-                        GreenGear.DOLocalRotate(
-                            GreenGear.localEulerAngles + new Vector3(0, 0, -rotateStep),
-                            rotateDuration,
-                            RotateMode.FastBeyond360
-                        ).SetEase(Ease.OutSine).OnComplete(() =>
+                        DOVirtual.DelayedCall(resetDelay, () =>
                         {
-                            // Delay Resetpos check to allow any new IncreaseGear call to happen
-                            DOVirtual.DelayedCall(resetDelay, () =>
-                            {
-                                if (!SpinWheelOn && Time.time - lastIncreaseTime >= resetDelay)
-                                {
-                                    Resetpos();
-                                }
-                            });
+                            if (!SpinWheelOn && Time.time - lastIncreaseTime >= resetDelay)
+                                Resetpos();
                         });
-                    }
+                    });
                 });
-            });
         }
+
+        public void SetGearImgFillAMount()
+        {
+            GearImg.DOFillAmount(gearcount, 0.5f);
+        }
+
+
 
         public void CompleteGear()
         {
-            SpinWheel.gameObject.transform.DOScale(Vector3.one * scalespin, 0.5f)
+            SpinParent.gameObject.transform.DOScale(Vector3.one * scalespin, 0.5f)
                 .SetEase(Ease.OutBounce)
                 .OnComplete(() =>
                 {
@@ -84,14 +138,16 @@ namespace nostra.booboogames.Tanuki
                 });
 
             gearcount = 0;
-            GearImg.fillAmount = 0;
+          // GearImg.fillAmount = 0;
         }
 
         public void Resetpos()
         {
             if (SpinWheelOn)
+            {
+                GearImg.DOFillAmount(0,0);
                 return;
-
+            }
             transform.DOKill(); // Stop any other tween before moving
             transform.DOLocalMoveX(moveOutX, moveDuration).SetEase(Ease.OutCubic);
         }
